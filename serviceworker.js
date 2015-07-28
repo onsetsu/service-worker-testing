@@ -6,18 +6,19 @@ console.log('Service Worker: File Start');
 
 // example usage:
 self.addEventListener('install', function(event) {
-    event.waitUntil(
-        caches.open('demo-cache').then(function(cache) {
-            return cache.put('/', new Response("From the cache!"));
-        })
-    );
+    console.log('Service Worker: Install');
 });
 
 self.addEventListener('fetch', function(event) {
+    console.log('Service Worker: Fetch', event.request);
+
     event.respondWith(
-        caches.match(event.request).then(function(response) {
-            return response || new Response("Nothing in the cache for this request");
-        })
+        fetch(event.request).then(
+            function(response) {
+                console.log('Service Worker: Response', response);
+                return response;
+            }
+        )
     );
 });
 
